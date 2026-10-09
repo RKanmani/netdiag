@@ -5,6 +5,7 @@ from pathlib import Path
 import plotly.graph_objects as go
 import streamlit as st
 
+import live
 import mock_runner
 import storage
 from app_helpers import COLORS, ICONS, STATE_LABEL, classify
@@ -66,7 +67,17 @@ use_mock = st.sidebar.checkbox("Use mock data", value=not HAVE_REAL, disabled=no
 scenario = st.sidebar.selectbox("Mock scenario", mock_runner.SCENARIOS) if use_mock else None
 if not HAVE_REAL:
     st.sidebar.caption("runner.py / verdict.py not found, so mock data is used.")
+live_interval = st.sidebar.slider("Live interval (s)", 5, 60, 15)
 st.sidebar.caption(f"Test domain: {cfg['test_domain']}  \nDNS server: {cfg['dns_server']}")
+
+
+def run_once():
+    if use_mock:
+        r = mock_runner.run_all(cfg, scenario)
+        return r, mock_runner.decide(r, cfg)
+    r = real_runner.run_all(cfg)
+    return r, real_verdict.decide(r, cfg)
+
 
 # ---------- main ----------
 st.title("🌐 Why is my internet slow?")
@@ -74,12 +85,7 @@ st.write("Click **Run Diagnosis** to test WiFi, DNS, TCP, TLS and HTTP in order.
 
 if st.button("▶ Run Diagnosis", type="primary"):
     with st.spinner("Testing each layer..."):
-        if use_mock:
-            results = mock_runner.run_all(cfg, scenario)
-            verdict = mock_runner.decide(results, cfg)
-        else:
-            results = real_runner.run_all(cfg)
-            verdict = real_verdict.decide(results, cfg)
+        results, verdict = run_once()
     storage.append_run(results, verdict, hist_path)
     st.session_state["last"] = (results, verdict)
 
@@ -88,6 +94,11 @@ if "last" in st.session_state:
     show_verdict(verdict)
     show_cards(results)
     st.plotly_chart(waterfall(results), use_container_width=True)
+
+st.divider()
+st.subheader("Live mode")
+if st.toggle("Run diagnosis automatically"):
+    live.render_live(run_once, cfg, live_interval)
 
 st.divider()
 st.subheader("History of past runs")

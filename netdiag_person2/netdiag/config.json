@@ -1,6 +1,6 @@
 {
   "test_domain": "www.google.com",
-  "dns_server": "8.8.8.8",
+  "dns_server": "auto",
   "gateway": "auto",
   "timeouts": {"dns": 3, "tcp": 3, "tls": 5, "http": 8, "ping": 2},
   "thresholds": {

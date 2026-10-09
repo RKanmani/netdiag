@@ -1,2 +1,4 @@
 timestamp,status,headline,total_ms,wifi_ms,dns_ms,tcp_ms,tls_ms,http_ms,wifi_ok,dns_ok,tcp_ok,tls_ok,http_ok
-2026-10-09 14:15:20,ok,Everything looks healthy,298.4,8.4,43.5,27.1,76.2,143.2,1,1,1,1,1
+2026-10-09 21:15:57,ok,Everything looks healthy,248.2,10.3,41.9,25.8,51.8,118.4,1,1,1,1,1
+2026-10-09 22:36:15,ok,Everything looks healthy,308.1,9.8,46.4,24.6,47.6,179.7,1,1,1,1,1
+2026-10-09 22:36:45,bad,"DNS is slow, the connection is fine",919.7,6.8,644.8,29.3,57.2,181.6,1,1,1,1,1
