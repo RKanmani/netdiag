@@ -1,0 +1,2 @@
+timestamp,status,headline,total_ms,wifi_ms,dns_ms,tcp_ms,tls_ms,http_ms,wifi_ok,dns_ok,tcp_ok,tls_ok,http_ok
+2026-10-09 14:15:20,ok,Everything looks healthy,298.4,8.4,43.5,27.1,76.2,143.2,1,1,1,1,1

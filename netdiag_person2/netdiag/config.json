@@ -1,0 +1,15 @@
+{
+  "test_domain": "www.google.com",
+  "dns_server": "8.8.8.8",
+  "gateway": "auto",
+  "timeouts": {"dns": 3, "tcp": 3, "tls": 5, "http": 8, "ping": 2},
+  "thresholds": {
+    "wifi": {"warn_ms": 30,  "bad_ms": 100, "loss_warn_pct": 5, "jitter_warn_ms": 30},
+    "dns":  {"warn_ms": 100, "bad_ms": 300},
+    "tcp":  {"warn_ms": 100, "bad_ms": 300},
+    "tls":  {"warn_ms": 200, "bad_ms": 500},
+    "http": {"warn_ms": 500, "bad_ms": 1500}
+  },
+  "cert_warn_days": 14,
+  "history_file": "history.csv"
+}
