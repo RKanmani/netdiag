@@ -1,4 +1,3 @@
-
 import html
 import json
 import threading
@@ -39,7 +38,7 @@ def get_status(data):
     if status in ("slow", "warning", "warn"):
         return "slow"
 
-    if data.get("packet_loss_percent", 0) >= 5:
+    if (data.get("packet_loss_percent") or 0) >= 5:
         return "slow"
 
     return "healthy"
@@ -81,14 +80,14 @@ def make_card(key, title, data):
     if key == "tls":
         extra = data.get("extra", {})
         if isinstance(extra, dict):
-            days = extra.get("days_remaining")
+            days = extra.get("cert_days_left")
             if days is not None:
                 detail = f"Certificate expires in {days} days"
 
     if key == "http":
         extra = data.get("extra", {})
         if isinstance(extra, dict):
-            code = extra.get("status_code")
+            code = extra.get("status")
             if code is not None:
                 detail = f"HTTP status code: {code}"
 

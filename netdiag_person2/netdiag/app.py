@@ -13,9 +13,9 @@ from app_helpers import COLORS, ICONS, STATE_LABEL, classify
 try:                                   # use the real runner/verdict once they exist
     import runner as real_runner
     import verdict as real_verdict
-    HAVE_REAL = True
-except ImportError:
-    HAVE_REAL = False
+    HAVE_REAL, IMPORT_ERROR = True, ""
+except ImportError as exc:
+    HAVE_REAL, IMPORT_ERROR = False, str(exc)
 
 BASE = Path(__file__).parent
 LABELS = {"wifi": "WiFi / Router", "dns": "DNS", "tcp": "TCP", "tls": "TLS", "http": "HTTP"}
@@ -66,7 +66,7 @@ st.sidebar.header("Settings")
 use_mock = st.sidebar.checkbox("Use mock data", value=not HAVE_REAL, disabled=not HAVE_REAL)
 scenario = st.sidebar.selectbox("Mock scenario", mock_runner.SCENARIOS) if use_mock else None
 if not HAVE_REAL:
-    st.sidebar.caption("runner.py / verdict.py not found, so mock data is used.")
+    st.sidebar.caption(f"Real runner unavailable, using mock data: {IMPORT_ERROR}")
 live_interval = st.sidebar.slider("Live interval (s)", 5, 60, 15)
 st.sidebar.caption(f"Test domain: {cfg['test_domain']}  \nDNS server: {cfg['dns_server']}")
 
@@ -93,7 +93,7 @@ if "last" in st.session_state:
     results, verdict = st.session_state["last"]
     show_verdict(verdict)
     show_cards(results)
-    st.plotly_chart(waterfall(results), use_container_width=True)
+    st.plotly_chart(waterfall(results), width="stretch")
 
 st.divider()
 st.subheader("Live mode")
@@ -111,7 +111,7 @@ else:
         fig = go.Figure(go.Scatter(x=df["timestamp"], y=df["total_ms"], mode="lines+markers"))
         fig.update_layout(title="Total time per run (ms)", height=280,
                           margin=dict(l=10, r=10, t=50, b=10))
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
     c1, c2 = st.columns(2)
     c1.download_button("Download history.csv", df.to_csv(index=False), "history.csv")
     if c2.button("Clear history"):

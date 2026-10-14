@@ -70,6 +70,8 @@ def ping_host(host, count=4, timeout=2):
 
         sent = int(sent_match.group(1)) if sent_match else count
         received = int(received_match.group(1)) if received_match else len(times)
+        if not times and "unreachable" in output.lower():
+            received = 0
     else:
         sent_match = re.search(r"(\d+)\s+packets transmitted", output, re.I)
         received_match = re.search(r"(\d+)\s+(?:packets )?received", output, re.I)

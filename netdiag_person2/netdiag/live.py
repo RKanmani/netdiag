@@ -42,7 +42,7 @@ def _show(buf, cfg):
                                  line=dict(color=LINE[l]), connectgaps=False))
     fig.update_layout(title=f"Live: last {len(rows)} runs (gaps = layer failed or skipped)",
                       yaxis_title="ms", height=360, margin=dict(l=10, r=10, t=50, b=10))
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
 
 def render_live(run_fn, cfg, interval=15, max_points=60):
